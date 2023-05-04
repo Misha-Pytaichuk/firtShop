@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="154.0" prefWidth="170.0" style="-fx-background-radius: 30; -fx-background-color: DCDCDC;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ItemController">
+   <children>
+      <Label fx:id="nameItemLabel" alignment="CENTER" prefHeight="21.0" prefWidth="160.0" text="Name" textFill="#797979">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="costItemLabel" layoutX="15.0" layoutY="110.0" prefHeight="21.0" prefWidth="140.0" text="Cost" textFill="#797979">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="countItemLabel" layoutX="15.0" layoutY="83.0" prefHeight="21.0" prefWidth="140.0" text="Count" textFill="#797979" />
+      <Button fx:id="openCardButton" mnemonicParsing="false" opacity="0.0" prefHeight="154.0" prefWidth="170.0" />
+   </children>
+   <opaqueInsets>
+      <Insets bottom="50.0" top="50.0" />
+   </opaqueInsets>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>

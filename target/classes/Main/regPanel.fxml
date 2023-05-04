@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane fx:id="regPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RegistrationController">
+   <children>
+      <Button fx:id="regButton" layoutX="300.0" layoutY="285.0" mnemonicParsing="false" text="Зареєструватися" />
+      <PasswordField fx:id="passwordField" layoutX="398.0" layoutY="79.0" promptText="Пароль" />
+      <TextField fx:id="loginField" layoutX="141.0" layoutY="79.0" promptText="Логін" />
+      <TextField fx:id="lastNameField" layoutX="141.0" layoutY="142.0" promptText="Прізвище" />
+      <TextField fx:id="nameField" layoutX="398.0" layoutY="142.0" promptText="Ім'я" />
+      <TextField fx:id="numberField" layoutX="273.0" layoutY="221.0" promptText="Номер телефону" />
+      <Label layoutX="265.0" layoutY="27.0" text="Створення облікового запису" />
+      <Label layoutX="141.0" layoutY="59.0" text="Логін" />
+      <Label layoutX="398.0" layoutY="59.0" text="Пароль" />
+      <Label layoutX="141.0" layoutY="121.0" text="Прізвище" />
+      <Label layoutX="398.0" layoutY="121.0" text="Ім'я" />
+      <Label layoutX="273.0" layoutY="200.0" text="Номер телефону" />
+      <Label fx:id="infoLabel" layoutX="181.0" layoutY="255.0" prefHeight="21.0" prefWidth="336.0" textAlignment="CENTER" textFill="RED" />
+      <Button fx:id="backButton" layoutX="23.0" layoutY="22.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="67.0" text="Назад" />
+   </children>
+</AnchorPane>
