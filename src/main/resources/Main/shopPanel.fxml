@@ -24,12 +24,14 @@
                   <ChoiceBox fx:id="categoryChoiceBox" layoutX="20.0" layoutY="136.0" prefHeight="31.0" prefWidth="182.0" style="-fx-background-radius: 100;">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></ChoiceBox>
+                     </cursor>
+                  </ChoiceBox>
                   <RadioButton fx:id="costRadioButton" layoutX="19.0" layoutY="426.0" mnemonicParsing="false" text="По ціні" textFill="#bcbcbc" />
                   <ChoiceBox fx:id="sortChoiceBox" layoutX="21.0" layoutY="369.0" prefHeight="31.0" prefWidth="182.0" style="-fx-background-radius: 100;">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></ChoiceBox>
+                     </cursor>
+                  </ChoiceBox>
                   <Label fx:id="categoryLaber" layoutX="21.0" layoutY="105.0" text="Категорія" textFill="WHITE">
                      <font>
                         <Font size="17.0" />
@@ -52,6 +54,14 @@
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                  </Button>
+                  <Button fx:id="dropFiltersButton" layoutX="7.0" layoutY="558.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="118.0" style="-fx-background-radius: 30; -fx-background-color: #b3b3b3;" text="Скинути" textFill="#5b5b5b">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font size="17.0" />
+                     </font>
                   </Button>
                </children>
             </AnchorPane>
@@ -164,12 +174,12 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Label fx:id="numberLabel" alignment="CENTER_RIGHT" layoutX="114.0" layoutY="66.0" prefHeight="0.0" prefWidth="252.0" text="number" textAlignment="CENTER" textFill="#7c7c7c">
+            <Label fx:id="numberLabel" alignment="CENTER_RIGHT" layoutX="113.0" layoutY="49.0" prefHeight="0.0" prefWidth="252.0" text="number" textAlignment="CENTER" textFill="#7c7c7c">
                <font>
                   <Font size="17.0" />
                </font>
             </Label>
-            <Label fx:id="idLabel" alignment="CENTER_RIGHT" layoutX="113.0" layoutY="118.0" prefHeight="0.0" prefWidth="252.0" text="id" textAlignment="CENTER" textFill="#7c7c7c">
+            <Label fx:id="idLabel" alignment="CENTER_RIGHT" layoutX="114.0" layoutY="75.0" prefHeight="0.0" prefWidth="252.0" text="id" textAlignment="CENTER" textFill="#7c7c7c">
                <font>
                   <Font size="17.0" />
                </font>
@@ -193,6 +203,11 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Pane>
+            <Button fx:id="myOrderButton" layoutX="129.0" layoutY="137.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="222.0" style="-fx-background-color: #b3b3b3; -fx-background-radius: 30;" text="Мої замовлення" textFill="#222222">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
       </AnchorPane>
       <Pane fx:id="backgroundForCard" opacity="0.46" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #000000;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -228,6 +243,154 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
+         </children>
+         <opaqueInsets>
+            <Insets bottom="50.0" top="50.0" />
+         </opaqueInsets>
+      </AnchorPane>
+      <AnchorPane fx:id="myOrdersPanel" prefHeight="522.0" prefWidth="820.0" style="-fx-background-color: #807f7f;" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <VBox prefHeight="522.0" prefWidth="820.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="-2.0">
+               <children>
+                  <HBox prefHeight="524.0" prefWidth="340.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ScrollPane fx:id="myOrderScrollPane" prefHeight="386.0" prefWidth="778.0" style="-fx-background-color: transparent;">
+                           <content>
+                              <GridPane fx:id="myOrderGridPane" alignment="CENTER" style="-fx-background-color: transparent;">
+                                 <padding>
+                                    <Insets left="2.5" top="-30.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </content>
+                           <HBox.margin>
+                              <Insets bottom="68.0" left="30.0" right="30.0" top="68.0" />
+                           </HBox.margin>
+                        </ScrollPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <AnchorPane prefHeight="68.0" prefWidth="820.0" style="-fx-background-color: #606060;" AnchorPane.bottomAnchor="452.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="nameLabel11" alignment="CENTER" layoutX="30.0" layoutY="21.0" prefHeight="26.0" prefWidth="174.0" text="Номер замовлення" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="50.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nameLabel111" alignment="CENTER" layoutX="419.0" layoutY="21.0" prefHeight="26.0" prefWidth="40.0" text="Дата" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="419.0" AnchorPane.rightAnchor="361.0" AnchorPane.topAnchor="21.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nameLabel1111" alignment="CENTER" layoutX="578.0" layoutY="21.0" prefHeight="26.0" prefWidth="40.0" text="Час" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="21.0" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="21.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="myOrdersBackButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #303030; -fx-background-radius: 100;" text="✕" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="765.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="myProductOrdersPanel" layoutX="10.0" layoutY="10.0" prefHeight="522.0" prefWidth="820.0" style="-fx-background-color: #807f7f;" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="230.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <VBox prefHeight="522.0" prefWidth="820.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="-2.0">
+               <children>
+                  <HBox prefHeight="524.0" prefWidth="340.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ScrollPane fx:id="myProductOrderScrollPanel" prefHeight="386.0" prefWidth="778.0" style="-fx-background-color: transparent;">
+                           <content>
+                              <GridPane fx:id="myProductOrderGridPane" alignment="CENTER" style="-fx-background-color: transparent;">
+                                 <padding>
+                                    <Insets left="2.5" top="-30.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </content>
+                           <HBox.margin>
+                              <Insets bottom="68.0" left="30.0" right="30.0" top="68.0" />
+                           </HBox.margin>
+                        </ScrollPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <AnchorPane prefHeight="68.0" prefWidth="820.0" style="-fx-background-color: #606060;" AnchorPane.bottomAnchor="452.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="nameLabel111" alignment="CENTER" layoutX="30.0" layoutY="21.0" prefHeight="26.0" prefWidth="174.0" text="Назва продукту" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="50.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nameLabel1111" alignment="CENTER" layoutX="419.0" layoutY="21.0" prefHeight="26.0" prefWidth="92.0" text="Ціна" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="419.0" AnchorPane.rightAnchor="309.0" AnchorPane.topAnchor="21.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nameLabel11111" alignment="CENTER" layoutX="578.0" layoutY="21.0" prefHeight="26.0" prefWidth="81.0" text="Кількість" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="21.0" AnchorPane.rightAnchor="161.0" AnchorPane.topAnchor="21.0">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="myProductOrdersBackButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #303030; -fx-background-radius: 100;" text="✕" textFill="WHITE" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="765.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="confirmPanel" layoutX="10.0" layoutY="10.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-radius: 30; -fx-background-color: DCDCDC;" visible="false" AnchorPane.bottomAnchor="210.0" AnchorPane.leftAnchor="390.0" AnchorPane.rightAnchor="390.0" AnchorPane.topAnchor="210.0">
+         <children>
+            <Label fx:id="nameItemLabel1" alignment="CENTER" layoutX="12.0" layoutY="14.0" prefHeight="36.0" prefWidth="477.0" text="Підтвердження" textFill="#797979">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <Button fx:id="confirmButton" layoutX="80.0" layoutY="245.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="340.0" style="-fx-background-radius: 100; -fx-background-color: #303030;" text="Підтвердити замовлення" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="confirmBackButton" layoutX="420.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #303030; -fx-background-radius: 100;" text="✕" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label layoutX="214.0" layoutY="107.0" text="Сума" textFill="#797979">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Label>
+            <Label fx:id="confirmSumLabel" layoutX="134.0" layoutY="183.0" prefHeight="43.0" prefWidth="233.0" textFill="#797979">
+               <font>
+                  <Font name="System Bold" size="29.0" />
+               </font>
+            </Label>
+            <Button disable="true" layoutX="120.0" layoutY="162.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="261.0" style="-fx-background-radius: 100; -fx-background-color: #797979;" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font size="1.0" />
+               </font>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets bottom="50.0" top="50.0" />

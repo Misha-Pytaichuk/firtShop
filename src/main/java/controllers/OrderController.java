@@ -1,8 +1,6 @@
 package controllers;
 
-import java.io.IOException;
-import java.util.*;
-
+import Entity.Order;
 import Entity.OrderItem;
 import Entity.Product;
 import Entity.User;
@@ -11,7 +9,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -19,24 +20,39 @@ import sql.MySQLCategoriesRepository;
 import sql.MySQLOrdersRepository;
 import sql.MySQLProductsRepository;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 public class OrderController implements ButtonListener{
 
+    public Label nameItemLabel1;
     private User user;
     private ItemController itemController = new ItemController();
     private ItemOrderController itemOrderController = new ItemOrderController();
+    private MyOrderItemController myOrderItemController = new MyOrderItemController();
+    private MyProductOrderItemController myProductOrderItemController = new MyProductOrderItemController();
+
     private MySQLCategoriesRepository categoriesRepository = new MySQLCategoriesRepository();
     private MySQLProductsRepository productsRepository = new MySQLProductsRepository();
+    private MySQLOrdersRepository ordersRepository = new MySQLOrdersRepository();
 
     private HashMap<String, Integer> categories = categoriesRepository.getCategory(); // Для категорій
     private Set<String> keysCategory = categories.keySet(); // Для категорій
 
     private ArrayList<Product> products = productsRepository.getProducts(); // Отримуємо всі товари
+    private ArrayList<Product> containerForProducts = products; // Контейнер
     private ArrayList<Product> filterProducts = products;
     private ArrayList<Product> changeProducts = new ArrayList<>();
     private ArrayList<OrderItem> orderItems = new ArrayList<>();
+    private ArrayList<MyOrderItemController> myOrderItemControllers = new ArrayList<>();
 
     private boolean isMenuHidden = true;
     private int countRow = 1;
+    private String radio;
+    private int categoryID = 0;
 
     @FXML
     private RadioButton costRadioButton;
@@ -147,64 +163,186 @@ public class OrderController implements ButtonListener{
     private Label infoItemLabel;
 
     @FXML
+    private Button confirmBackButton;
+
+    @FXML
+    private Label confirmSumLabel;
+
+    @FXML
+    private Button confirmButton;
+
+    @FXML
+    private AnchorPane confirmPanel;
+
+    @FXML
+    private Button myOrderButton;
+
+    @FXML
+    private Button myOrdersBackButton;
+
+    @FXML
+    private ScrollPane myOrderScrollPane;
+
+    @FXML
+    private GridPane myOrderGridPane;
+
+    @FXML
+    private AnchorPane myOrdersPanel;
+
+    @FXML
+    private Button dropFiltersButton;
+
+    @FXML
+    private AnchorPane myProductOrdersPanel;
+
+    @FXML
+    private ScrollPane myProductOrderScrollPanel;
+
+    @FXML
+    private GridPane myProductOrderGridPane;
+
+    @FXML
+    private Button myProductOrdersBackButton;
+
+    @FXML
     void initialize() {
-        pushRadioButtonsToGroup();
+        pushInitItems();
         pushToScrollPanel(products);
-        pushCategoriesToChoiceBox();
-        pushToSortChoiceBox();
         choiceSortKind();
         setUserToRightPanel();
         choiceCategory();
-        completeOrder();
+        confirmOrder();
+        checkMyOrders();
+        searchProduct();
+        dropFilters();
     }
 
-    public void pushRadioButtonsToGroup(){
+    public void pushInitItems(){
         ToggleGroup group = new ToggleGroup();
 
         costRadioButton.setToggleGroup(group);
         nameRadioButton.setToggleGroup(group);
         hasRadioButton.setToggleGroup(group);
-    }
 
-    public void pushCategoriesToChoiceBox(){
+        sortChoiceBox.getItems().add("За зростанням");
+        sortChoiceBox.getItems().add("За спаданням");
+        sortChoiceBox.getItems().add("Без сортування");
+
+        sortChoiceBox.setValue("Без сортування");
+
         categoryChoiceBox.getItems().addAll(keysCategory);
         categoryChoiceBox.getItems().add("Всі");
+    }
+    public void choiceSortKind(){
+        sortChoiceBox.setOnAction(event -> {
+            if(sortChoiceBox.getValue().equals("За зростанням")){
+                choiceFilter("asc");
+            }
+            if(sortChoiceBox.getValue().equals("За спаданням")){
+                choiceFilter("desc");
+            }
+            if(sortChoiceBox.getValue().equals("Без сортування")){
+                choiceFilter("none");
+            }
+        });
+    }
+    public void choiceFilter(String s){
+        searchButton.setOnAction(event -> {
+            ArrayList<Product> list = new ArrayList<>();
+            gridPane.getChildren().clear();
+            if(nameRadioButton.isSelected()) {
+                radio = "nameProduct";
+            }
+            else if(costRadioButton.isSelected()) {
+                radio = "cost";
+            }
+            else if(hasRadioButton.isSelected()) {
+                radio = "countProduct";
+            }
+            switch (s){
+                case "asc":
+                    for (Product product: productsRepository.getProductASC(radio, categoryID)) {
+                        for (Product filter:changeProducts) {
+                            if(product.getId() == filter.getId()) product.setCount(filter.getCount());
+                        }
+                        list.add(product);
+                    }
+                    pushToScrollPanel(list);
+                    break;
+                case "desc":
+                    for (Product product: productsRepository.getProductDESC(radio, categoryID)) {
+                        for (Product filter:changeProducts) {
+                            if(product.getId() == filter.getId()) product.setCount(filter.getCount());
+                        }
+                        list.add(product);
+                    }
+                    pushToScrollPanel(list);
+                    break;
+                case "none":
+                    pushToScrollPanel(filterProducts);
+                    break;
+            }
+            System.out.println(radio + " " + s + " " + categoryID);
+        });
     }
 
     public void choiceCategory(){
         categoryChoiceBox.setOnAction(event -> {
             gridPane.getChildren().clear();
-            if(categoryChoiceBox.getValue().equals("Всі")) {
-                filterProducts = products;
-                pushToScrollPanel(filterProducts);
+            if(categoryChoiceBox.getValue().equals("Всі")){
+                filterProducts = containerForProducts;
+                categoryID = 0;
             }
+
             for (String str:keysCategory) {
-                if(categoryChoiceBox.getValue().equals(str))
-                    filterProducts = productsRepository.getProductsByCategory(categories.get(str));
-                    pushToScrollPanel(filterProducts);
+                if(categoryChoiceBox.getValue().equals(str)){
+                    categoryID = categories.get(str);
+                    filterProducts = productsRepository.getProductsByCategory(categoryID);
+                }
             }
+            pushToScrollPanel(filterProducts);
+            searchButton.fire();
         });
     }
 
-    public void pushToSortChoiceBox(){
-        sortChoiceBox.getItems().add("за зростанням");
-        sortChoiceBox.getItems().add("за спаданням");
-        sortChoiceBox.getItems().add("Без сортування");
+    public void dropFilters(){
+        dropFiltersButton.setOnAction(event -> {
+            gridPane.getChildren().clear();
+
+            nameRadioButton.setSelected(false);
+            costRadioButton.setSelected(false);
+            hasRadioButton.setSelected(false);
+
+            categoryChoiceBox.setValue("Всі");
+            sortChoiceBox.setValue("Без сортування");
+
+            pushToScrollPanel(containerForProducts);
+        });
     }
 
-    public void choiceSortKind(){
-        sortChoiceBox.setOnAction(event -> {
-            gridPane.getChildren().clear();
-            if(sortChoiceBox.getValue().equals("за зростанням")){
+    public void searchProduct(){
+        searchButtonForField.setOnAction(event -> {
+            ArrayList<Product> list = new ArrayList<>();
 
-            }
-            if(sortChoiceBox.getValue().equals("за спаданням")){
-                pushToScrollPanel(productsRepository.getProductDESC());
-            }
-            if(sortChoiceBox.getValue().equals("Без сортування")){
+            String text = String.valueOf(searchFiled.getCharacters());
 
-                pushToScrollPanel(products);
+            System.out.println(text);
+            if(text.isEmpty()) {
+                pushToScrollPanel(filterProducts);
+            } else {
+                gridPane.getChildren().clear();
+                ArrayList<Product> searchProducts = productsRepository.getProductsByName(text);
+
+                for (Product filter:filterProducts) {
+                    for (Product search: searchProducts) {
+                        if(filter.getName().equals(search.getName())) {
+                            search.setCount(filter.getCount());
+                            list.add(search);
+                        }
+                    }
+                }
             }
+            pushToScrollPanel(list);
         });
     }
 
@@ -216,16 +354,67 @@ public class OrderController implements ButtonListener{
         numberLabel.setText(user.getNumber());
         idLabel.setText("ID: " + user.getId());
 
+        pushMyOrders();
+
         userPanel.setTranslateX(userPanel.getWidth()+360);
         helpButton.setOnAction(actionEvent -> {
-
             hideRightPanel();
-
         });
         if(isMenuHidden){
             hideButton.setOnAction(event -> {
                 hideRightPanel();
             });
+        }
+    }
+
+    public void pushMyOrders() {
+        myOrderGridPane.getChildren().clear();
+        ArrayList<Order> orders = ordersRepository.getOrdersById(user.getId());
+
+        try {
+            for (Order order: orders) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/Main/myOrderItem1.fxml"));
+                AnchorPane anchorPane = loader.load();
+                myOrderItemController = loader.getController();
+
+                myOrderItemController.setData(order);
+
+                myOrderItemController.addButtonListener(this);
+
+                myOrderGridPane.add(anchorPane, 0, countRow++);
+                myOrderGridPane.setMargin(anchorPane, new Insets(1));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        for (Order order: orders) {
+            System.out.println(order.getNumber() + " " + order.getTimestamp());
+        }
+    }
+
+    public void pushMyProductOrders(ArrayList<Product> products) {
+
+        try {
+            for (Product product: products) {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/Main/myProductOrderItem.fxml"));
+                AnchorPane anchorPane = loader.load();
+                myProductOrderItemController = loader.getController();
+
+                myProductOrderItemController.setData(product);
+
+                myProductOrderGridPane.add(anchorPane, 0, countRow++);
+                myProductOrderGridPane.setMargin(anchorPane, new Insets(1));
+            }
+
+            myProductOrdersBackButton.setOnAction(event -> {
+                myProductOrderGridPane.getChildren().clear();
+                myProductOrdersPanel.setVisible(false);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -297,7 +486,7 @@ public class OrderController implements ButtonListener{
                 infoItemLabel.setText("Введіть кількість!");
                 return;
             }
-            if(fieldCount > oldCount) {
+            if(!productsRepository.checkProductAvailability(product.getId(), fieldCount)) {
                 infoItemLabel.setText("Нажаль, такої кількісті немає.");
                 return;
             }
@@ -335,6 +524,20 @@ public class OrderController implements ButtonListener{
             itemOrderController = loader.getController();
             orderItems.add(new OrderItem(itemOrderController, orderProduct, anchorPane));
 
+
+            System.out.println(oldProduct.getName() + " " + oldProduct.getCount());
+            for (Product product: containerForProducts) {
+                if(product.getId() == oldProduct.getId()) {
+                    product.setCount(oldProduct.getCount());
+                    System.out.println(product.getName() + " " + product.getCount());
+                }
+            }
+            for (Product product: filterProducts) {
+                if(product.getId() == oldProduct.getId()) {
+                    product.setCount(oldProduct.getCount());
+                    System.out.println(product.getName() + " " + product.getCount());
+                }
+            }
             changeProducts.add(oldProduct); // Товар, який зміниться після оформлення заказу
             itemController.setData(oldProduct); // Сетаєм дані для картки товару в мейн ролл пейні
 
@@ -353,7 +556,6 @@ public class OrderController implements ButtonListener{
         orderItem.getProduct().setCount(orderItem.getProduct().getCount()+fieldCount);
         orderItem.getProduct().setPrice(orderItem.getProduct().getPrice()+newPrice);
         orderItem.getItemOrderController().setData(orderItem.getProduct(), ic);
-
     }
 
     public void removeFromOrder(Product product, ItemOrderController ioc, ItemController ic){
@@ -379,12 +581,39 @@ public class OrderController implements ButtonListener{
         }
     }
 
-    public void completeOrder(){
+    public void confirmOrder(){
         checkoutButton.setOnAction(event -> {
-            new MySQLOrdersRepository().buy(user.getId(), orderItems);
-            new MySQLProductsRepository().add(changeProducts);
-            orderItems.clear();
-            orderGridPane.getChildren().clear();
+            confirmPanel.setVisible(true);
+            backgroundForCard.setVisible(true);
+            double sum = 0;
+            for (OrderItem orderItem: orderItems) {
+                sum += orderItem.getProduct().getPrice();
+            }
+            confirmSumLabel.setText(String.valueOf(sum));
+            confirmButton.setOnAction(confirmEvent->{
+                ordersRepository.buy(user.getId(), orderItems);
+                productsRepository.update(changeProducts);
+                pushMyOrders();
+                orderItems.clear();
+                orderGridPane.getChildren().clear();
+                confirmPanel.setVisible(false);
+                backgroundForCard.setVisible(false);
+            });
+            confirmBackButton.setOnAction(backEvent -> {
+                confirmPanel.setVisible(false);
+                backgroundForCard.setVisible(false);
+            });
+        });
+    }
+
+    public void checkMyOrders(){
+        myOrderButton.setOnAction(event -> {
+            myOrdersPanel.setVisible(true);
+            backgroundForCard.setVisible(true);
+        });
+        myOrdersBackButton.setOnAction(event -> {
+            myOrdersPanel.setVisible(false);
+            backgroundForCard.setVisible(false);
         });
     }
 
@@ -398,5 +627,12 @@ public class OrderController implements ButtonListener{
     @Override
     public void onButtonClicked(Product product, ItemOrderController ioc, ItemController ic) {
         removeFromOrder(product, ioc, ic);
+    }
+
+    @Override
+    public void onButtonClicked(MyOrderItemController myOrderItemController, Order order) {
+        myProductOrdersPanel.setVisible(true);
+        ArrayList <Product> products = productsRepository.getProductFromOrder(user.getId(), order.getNumber());
+        pushMyProductOrders(products);
     }
 }

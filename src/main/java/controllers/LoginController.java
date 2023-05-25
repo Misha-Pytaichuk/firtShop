@@ -25,12 +25,6 @@ public class LoginController {
     private AnchorPane panel;
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private Label infoLabel;
 
     @FXML
@@ -85,7 +79,10 @@ public class LoginController {
 
             try {
                 loginButton.getScene().getWindow().hide();
-                new SceneController().switchToShopPanel(actionEvent, user);
+                if(!user.isRole())
+                    new SceneController().switchToShopPanel(actionEvent, user);
+                else
+                    new SceneController().switchToAdminPanel(actionEvent, user);
             } catch (IOException e) {
                 e.printStackTrace();
             }

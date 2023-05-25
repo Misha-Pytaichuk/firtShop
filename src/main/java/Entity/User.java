@@ -10,6 +10,7 @@ public class User {
     private String name;
     private String lastName;
     private String number;
+    private boolean role;
 
     public User(String login, String password, String name, String lastName, String number) {
         this.login = login;
@@ -19,11 +20,27 @@ public class User {
         this.number = number;
     }
 
+    public User(int id, String name, String lastName, String number, boolean role) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.number = number;
+        this.role = role;
+    }
+
     public User(int id, String name, String lastName, String number) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.number = number;
+    }
+
+    public boolean isRole() {
+        return role;
+    }
+
+    public void setRole(boolean role) {
+        this.role = role;
     }
 
     public int getId() {

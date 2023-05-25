@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="76.0" prefWidth="760.0" style="-fx-background-color: DCDCDC;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MyOrderItemController">
+   <children>
+      <Label fx:id="myOrderNumberItemLabel" alignment="CENTER" layoutY="35.0" prefHeight="21.0" prefWidth="170.0" text="Номер замовлення" textFill="#797979" AnchorPane.topAnchor="35.0">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="myOrderTimeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="513.0" layoutY="32.0" prefHeight="26.0" prefWidth="109.0" text="Час" textFill="#797979" AnchorPane.topAnchor="32.0" />
+      <Label fx:id="myOrderDateLabel" alignment="CENTER" layoutX="302.0" layoutY="32.0" prefHeight="26.0" prefWidth="202.0" text="Дата" textFill="#797979" AnchorPane.topAnchor="32.0">
+         <padding>
+            <Insets left="2.0" />
+         </padding>
+      </Label>
+      <Button fx:id="myOrderAboutButton" layoutX="660.0" layoutY="34.0" mnemonicParsing="false" style="-fx-background-color: #b3b3b3; -fx-background-radius: 30;" text="Більше" />
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

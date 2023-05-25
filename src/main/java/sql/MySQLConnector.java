@@ -8,7 +8,7 @@ public class MySQLConnector {
     private static MySQLConnector mySQLConnector;
     private static Connection connection;
     private static final String url = "jdbc:mysql://localhost:3306/shop";
-    private static final String user = "root";
+    private static final String user = "admin";
     private static final String password = "admin";
 
     public static synchronized MySQLConnector getMySQLConnector(){

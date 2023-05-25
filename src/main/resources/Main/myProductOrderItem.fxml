@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="76.0" prefWidth="760.0" style="-fx-background-color: DCDCDC;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MyProductOrderItemController">
+   <children>
+      <Label fx:id="myProductNameLabel" alignment="CENTER" layoutY="35.0" prefHeight="21.0" prefWidth="170.0" text="Назва" textFill="#797979" AnchorPane.topAnchor="35.0">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="myProductCostLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="513.0" layoutY="32.0" prefHeight="26.0" prefWidth="109.0" text="Ціна" textFill="#797979" AnchorPane.topAnchor="32.0" />
+      <Label fx:id="myProductCountLabel" alignment="CENTER" layoutX="302.0" layoutY="32.0" prefHeight="26.0" prefWidth="202.0" text="Кількість" textFill="#797979" AnchorPane.topAnchor="32.0">
+         <padding>
+            <Insets left="2.0" />
+         </padding>
+      </Label>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</AnchorPane>

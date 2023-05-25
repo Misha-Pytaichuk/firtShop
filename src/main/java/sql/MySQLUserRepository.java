@@ -13,9 +13,6 @@ public class MySQLUserRepository implements UserRepository {
 
     @Override
     public User save(String login, String password, String name, String lastName, String number) {
-        if(findByUsername(login, password) != null){
-            return null;
-        }
 
         String querySave = "INSERT INTO user(login, password, name, lastName, telephoneNumber, isManager) VALUES(?, ?, ?, ?, ?, ?)";
 
@@ -31,9 +28,10 @@ public class MySQLUserRepository implements UserRepository {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (e.getSQLState().equals("45000")) {
+                return null;
+            }
         }
-
         return findByUsername(login, password);
     }
 
@@ -48,6 +46,27 @@ public class MySQLUserRepository implements UserRepository {
 
             resultSet = preparedStatement.executeQuery();
 
+            while (resultSet.next()){
+                return new User(resultSet.getInt(1),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getBoolean(7));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User getUser(int id){
+        String queryFindByUsername = "SELECT * FROM user WHERE id = ?";
+
+        try {
+            preparedStatement = MySQLConnector.getMySQLConnector().getConnection().prepareStatement(queryFindByUsername);
+            preparedStatement.setInt(1, id);
+
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 return new User(resultSet.getInt(1),
                         resultSet.getString(4),

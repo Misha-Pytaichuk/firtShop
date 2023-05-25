@@ -18,10 +18,6 @@ public class OrderItem {
         return itemOrderController;
     }
 
-    public void setItemOrderController(ItemOrderController itemOrderController) {
-        this.itemOrderController = itemOrderController;
-    }
-
     public Product getProduct() {
         return product;
     }
